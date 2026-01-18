@@ -19,7 +19,6 @@ Browse, search, and stream directly from <a href="https://www.pornhub.com/">porn
 
 <p align="center">
 <b>Made with lust.</b><br>
-by <b>Sayan</b>
 </p>
 
 ---
