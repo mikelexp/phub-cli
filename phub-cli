@@ -34,11 +34,20 @@ while true; do
         [ -z "$category" ] && continue
 
         cid=$(echo "$category" | awk -F'|' '{print $1}')
+        page=1
 
         #res
         while true; do
-            video=$("$DIR/modules/videos.py" "$cid" | fzf \
-                --prompt="Video ❯ " \
+            # Build list with pagination
+            video_list=$("$DIR/modules/videos.py" "$cid" "$page")
+
+            # Add navigation options
+            nav_options=""
+            [ "$page" -gt 1 ] && nav_options="PREV|<<< Previous page\n"
+            nav_options="${nav_options}NEXT|>>> Next page"
+
+            video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
+                --prompt="Video (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
@@ -51,6 +60,16 @@ while true; do
             [ -z "$video" ] && break
 
             viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+
+            # Handle pagination
+            if [ "$viewkey" = "NEXT" ]; then
+                ((page++))
+                continue
+            elif [ "$viewkey" = "PREV" ]; then
+                ((page--))
+                [ "$page" -lt 1 ] && page=1
+                continue
+            fi
 
             #pre-play menu
             while true; do
@@ -165,10 +184,19 @@ while true; do
     2)
         read -r -p "Search query: " query </dev/tty
         [ -z "$query" ] && continue
+        page=1
 
         while true; do
-            video=$("$DIR/modules/search.py" "$query" | fzf \
-                --prompt="Search ❯ " \
+            # Build list with pagination
+            video_list=$("$DIR/modules/search.py" "$query" "$page")
+
+            # Add navigation options
+            nav_options=""
+            [ "$page" -gt 1 ] && nav_options="PREV|<<< Previous page\n"
+            nav_options="${nav_options}NEXT|>>> Next page"
+
+            video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
+                --prompt="Search (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
@@ -181,6 +209,16 @@ while true; do
             [ -z "$video" ] && break
 
             viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+
+            # Handle pagination
+            if [ "$viewkey" = "NEXT" ]; then
+                ((page++))
+                continue
+            elif [ "$viewkey" = "PREV" ]; then
+                ((page--))
+                [ "$page" -lt 1 ] && page=1
+                continue
+            fi
 
             #pre-play menu
             while true; do
