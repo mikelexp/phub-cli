@@ -142,7 +142,7 @@ while true; do
                     3)
                         # Open in browser
                         open_in_browser "$viewkey"
-                        break
+                        continue
                         ;;
                     b|B)
                         break
@@ -272,7 +272,7 @@ while true; do
                     3)
                         # Open in browser
                         open_in_browser "$viewkey"
-                        break
+                        continue
                         ;;
                     b|B)
                         break
