@@ -198,3 +198,24 @@ download_video() {
 
     rm -f /tmp/phub_download.$$
 }
+
+open_in_browser() {
+    viewkey="$1"
+    page_url="https://www.pornhub.com/view_video.php?viewkey=$viewkey"
+
+    echo "" > /dev/tty
+    echo "  🌐 Opening in browser..." > /dev/tty
+
+    if command -v xdg-open >/dev/null; then
+        xdg-open "$page_url" 2>/dev/null &
+    elif command -v open >/dev/null; then
+        open "$page_url" 2>/dev/null &
+    else
+        echo "  ❌ No browser opener found" > /dev/tty
+        sleep 2
+        return 1
+    fi
+
+    sleep 1
+    return 0
+}

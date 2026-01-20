@@ -139,6 +139,11 @@ while true; do
                         [ "$nav" = "home" ] && break
                         break
                         ;;
+                    3)
+                        # Open in browser
+                        open_in_browser "$viewkey"
+                        break
+                        ;;
                     b|B)
                         break
                         ;;
@@ -262,6 +267,11 @@ while true; do
                             esac
                         done
                         [ "$nav" = "home" ] && break
+                        break
+                        ;;
+                    3)
+                        # Open in browser
+                        open_in_browser "$viewkey"
                         break
                         ;;
                     b|B)

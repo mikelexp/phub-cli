@@ -33,6 +33,7 @@ pre_play_menu() {
     echo " ---------------------------------" > /dev/tty
     echo "  [1] Watch video" > /dev/tty
     echo "  [2] Download video" > /dev/tty
+    echo "  [3] Open in browser" > /dev/tty
     echo "  [b] Back to results" > /dev/tty
     echo " ---------------------------------" > /dev/tty
     echo "" > /dev/tty
