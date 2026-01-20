@@ -10,16 +10,16 @@ cat << "EOF"
    ██║     ██║  ██║╚██████╔╝██████╔╝      ╚██████╔╝███████╗██║
    ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═════╝        ╚═════╝ ╚══════╝╚═╝
 
-            terminal video browser
+              terminal video browser
           lust-driven streaming experience
 
-                    version v0.1.1
+                   version v0.1.1
 
- --------------------------------------------------
-   [1]  Browse categories
-   [2]  Search videos
-   [q]  Quit
- --------------------------------------------------
+ ──────────────────────────────────────────────
+    [1]  Browse categories
+    [2]  Search videos
+    [q]  Quit
+ ──────────────────────────────────────────────
 
 EOF
 }
