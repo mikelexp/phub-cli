@@ -37,7 +37,8 @@ while true; do
             --with-nth=2 \
         | awk -F'|' '{print $1}')
 
-    [ -z "$choice" ] && continue
+    # ESC in home menu = quit
+    [ -z "$choice" ] && choice="quit"
 
     case "$choice" in
 
