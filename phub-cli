@@ -2,7 +2,14 @@
 
 exec </dev/tty
 
-DIR="$(cd "$(dirname "$0")" && pwd)"
+# Resolve script directory (handles symlinks)
+SCRIPT="$0"
+while [ -L "$SCRIPT" ]; do
+    SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT")" && pwd)"
+    SCRIPT="$(readlink "$SCRIPT")"
+    [[ "$SCRIPT" != /* ]] && SCRIPT="$SCRIPT_DIR/$SCRIPT"
+done
+DIR="$(cd -P "$(dirname "$SCRIPT")" && pwd)"
 
 source "$DIR/modules/categories.sh"
 source "$DIR/modules/player.sh"
