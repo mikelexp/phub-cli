@@ -53,15 +53,6 @@ quality_menu() {
         | _fzf_menu "Quality"
 }
 
-post_play_menu() {
-    printf "%s\n" \
-        "replay|Replay video" \
-        "results|Back to results" \
-        "home|Back to home" \
-        "quit|Quit" \
-        | _fzf_menu "What next?"
-}
-
 post_download_menu() {
     printf "%s\n" \
         "another|Download another quality" \

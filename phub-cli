@@ -101,39 +101,9 @@ while true; do
                 case "$pre_action" in
                     watch)
                         # Watch video
-                        while true; do
-                            if ! play_video "$viewkey"; then
-                                echo "❌ Video unavailable"
-                                sleep 1
-                                break
-                            fi
-
-                            clear
-                            action=$(post_play_menu)
-                            [ -z "$action" ] && break
-
-                            case "$action" in
-                                replay)
-                                    continue
-                                    ;;
-                                results)
-                                    break
-                                    ;;
-                                home)
-                                    nav="home"
-                                    break
-                                    ;;
-                                quit)
-                                    clear
-                                    exit 0
-                                    ;;
-                                *)
-                                    continue
-                                    ;;
-                            esac
-                        done
-                        [ "$nav" = "home" ] && break
-                        break
+                        play_video "$viewkey"
+                        # Return to pre-play menu (clear will be done by loop)
+                        continue
                         ;;
                     download)
                         # Download video
@@ -254,39 +224,9 @@ while true; do
                 case "$pre_action" in
                     watch)
                         # Watch video
-                        while true; do
-                            if ! play_video "$viewkey"; then
-                                echo "❌ Video unavailable"
-                                sleep 1
-                                break
-                            fi
-
-                            clear
-                            action=$(post_play_menu)
-                            [ -z "$action" ] && break
-
-                            case "$action" in
-                                replay)
-                                    continue
-                                    ;;
-                                results)
-                                    break
-                                    ;;
-                                home)
-                                    nav="home"
-                                    break
-                                    ;;
-                                quit)
-                                    clear
-                                    exit 0
-                                    ;;
-                                *)
-                                    continue
-                                    ;;
-                            esac
-                        done
-                        [ "$nav" = "home" ] && break
-                        break
+                        play_video "$viewkey"
+                        # Return to pre-play menu (clear will be done by loop)
+                        continue
                         ;;
                     download)
                         # Download video

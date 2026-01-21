@@ -83,7 +83,7 @@ play_video() {
     echo "  ▶ Launching player..." > /dev/tty
     sleep 0.6
 
-    #play
+    #play in background (detached from stdin)
     mpv \
         --really-quiet \
         --no-ytdl \
@@ -91,13 +91,9 @@ play_video() {
         --hwdec=auto \
         --cache=yes \
         --cache-secs=10 \
-        "$stream_url"
+        "$stream_url" </dev/null &>/dev/null &
 
-    end_time=$(date +%s)
-    duration=$((end_time - start_time))
-
-    #failure
-    [ "$duration" -lt 5 ] && return 1
+    disown
 
     return 0
 }
