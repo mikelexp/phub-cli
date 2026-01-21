@@ -26,6 +26,7 @@ while true; do
     choice=$(printf "%s\n" \
         "browse|Browse categories" \
         "search|Search videos" \
+        "channels|Search by channel" \
         "quit|Quit" \
         | fzf \
             --prompt="Home ❯ " \
@@ -193,6 +194,142 @@ while true; do
 
             video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
                 --prompt="Search (page $page) ❯ " \
+                --height=100% \
+                --border \
+                --layout=reverse \
+                --cycle \
+                --delimiter="|" \
+                --with-nth=2 \
+                --preview='echo {} | cut -d"|" -f2' \
+                --preview-window=down:4:wrap)
+
+            [ -z "$video" ] && break
+
+            viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+
+            # Handle pagination
+            if [ "$viewkey" = "NEXT" ]; then
+                ((page++))
+                continue
+            elif [ "$viewkey" = "PREV" ]; then
+                ((page--))
+                [ "$page" -lt 1 ] && page=1
+                continue
+            fi
+
+            #pre-play menu
+            while true; do
+                clear
+                pre_action=$(pre_play_menu)
+                [ -z "$pre_action" ] && break
+
+                case "$pre_action" in
+                    watch)
+                        # Watch video
+                        play_video "$viewkey"
+                        # Return to pre-play menu (clear will be done by loop)
+                        continue
+                        ;;
+                    download)
+                        # Download video
+                        while true; do
+                            clear
+                            quality=$(quality_menu)
+                            [ -z "$quality" ] && break
+
+                            case "$quality" in
+                                1|2|3|4)
+                                    if download_video "$viewkey" "$quality"; then
+                                        clear
+                                        dl_action=$(post_download_menu)
+                                        [ -z "$dl_action" ] && break
+
+                                        case "$dl_action" in
+                                            another)
+                                                continue
+                                                ;;
+                                            results)
+                                                break
+                                                ;;
+                                            home)
+                                                nav="home"
+                                                break
+                                                ;;
+                                            quit)
+                                                clear
+                                                exit 0
+                                                ;;
+                                            *)
+                                                continue
+                                                ;;
+                                        esac
+                                    else
+                                        break
+                                    fi
+                                    ;;
+                                back)
+                                    break
+                                    ;;
+                                *)
+                                    continue
+                                    ;;
+                            esac
+                        done
+                        [ "$nav" = "home" ] && break
+                        break
+                        ;;
+                    browser)
+                        # Open in browser
+                        open_in_browser "$viewkey"
+                        continue
+                        ;;
+                    back)
+                        break
+                        ;;
+                    *)
+                        continue
+                        ;;
+                esac
+            done
+
+            if [ "$nav" = "home" ]; then
+                nav=""
+                break
+            fi
+        done
+        ;;
+
+    #Channels
+    channels)
+        read -r -p "Search channels: " query </dev/tty
+        [ -z "$query" ] && continue
+
+        # List channels
+        channel=$("$DIR/modules/channels.py" "$query" | fzf \
+            --prompt="Channel ❯ " \
+            --height=100% \
+            --border \
+            --layout=reverse \
+            --cycle \
+            --delimiter="|" \
+            --with-nth=2)
+
+        [ -z "$channel" ] && continue
+
+        channel_name=$(echo "$channel" | awk -F'|' '{print $1}')
+        page=1
+
+        while true; do
+            # Build list with pagination
+            video_list=$("$DIR/modules/channel_videos.py" "$channel_name" "$page")
+
+            # Add navigation options
+            nav_options=""
+            [ "$page" -gt 1 ] && nav_options="PREV|<<< Previous page\n"
+            nav_options="${nav_options}NEXT|>>> Next page"
+
+            video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
+                --prompt="Channel videos (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
