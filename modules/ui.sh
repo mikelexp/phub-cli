@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+_fzf_menu() {
+    local prompt="$1"
+    fzf \
+        --prompt="$prompt ❯ " \
+        --height=100% \
+        --border \
+        --layout=reverse \
+        --cycle \
+        --delimiter="|" \
+        --with-nth=2 \
+        | awk -F'|' '{print $1}'
+}
+
 show_home() {
 cat << "EOF"
 
@@ -15,12 +28,6 @@ cat << "EOF"
 
                    version v0.1.1
 
- ──────────────────────────────────────────────
-    [1]  Browse categories
-    [2]  Search videos
-    [q]  Quit
- ──────────────────────────────────────────────
-
 EOF
 }
 
@@ -28,63 +35,39 @@ EOF
 
 
 pre_play_menu() {
-    echo "" > /dev/tty
-    echo " What do you want to do? 🎬" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "  [1] Watch video" > /dev/tty
-    echo "  [2] Download video" > /dev/tty
-    echo "  [3] Open in browser" > /dev/tty
-    echo "  [b] Back to results" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "" > /dev/tty
-
-    read -r -p "Select option: " choice < /dev/tty
-    echo "$choice"
+    printf "%s\n" \
+        "watch|Watch video" \
+        "download|Download video" \
+        "browser|Open in browser" \
+        "back|Back to results" \
+        | _fzf_menu "Action"
 }
 
 quality_menu() {
-    echo "" > /dev/tty
-    echo " Select quality 📺" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "  [1] Best quality (1080p+)" > /dev/tty
-    echo "  [2] 720p" > /dev/tty
-    echo "  [3] 480p" > /dev/tty
-    echo "  [4] 360p" > /dev/tty
-    echo "  [b] Back" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "" > /dev/tty
-
-    read -r -p "Select quality: " choice < /dev/tty
-    echo "$choice"
+    printf "%s\n" \
+        "1|Best quality (1080p+)" \
+        "2|720p" \
+        "3|480p" \
+        "4|360p" \
+        "back|Back" \
+        | _fzf_menu "Quality"
 }
 
 post_play_menu() {
-    echo "" > /dev/tty
-    echo " What next? 💦" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "  [1] Replay video" > /dev/tty
-    echo "  [2] Back to results" > /dev/tty
-    echo "  [3] Back to home" > /dev/tty
-    echo "  [q] Quit" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "" > /dev/tty
-
-    read -r -p "Select option: " choice < /dev/tty
-    echo "$choice"
+    printf "%s\n" \
+        "replay|Replay video" \
+        "results|Back to results" \
+        "home|Back to home" \
+        "quit|Quit" \
+        | _fzf_menu "What next?"
 }
 
 post_download_menu() {
-    echo "" > /dev/tty
-    echo " Download complete! 💾" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "  [1] Download another quality" > /dev/tty
-    echo "  [2] Back to results" > /dev/tty
-    echo "  [3] Back to home" > /dev/tty
-    echo "  [q] Quit" > /dev/tty
-    echo " ---------------------------------" > /dev/tty
-    echo "" > /dev/tty
-
-    read -r -p "Select option: " choice < /dev/tty
-    echo "$choice"
+    printf "%s\n" \
+        "another|Download another quality" \
+        "results|Back to results" \
+        "home|Back to home" \
+        "quit|Quit" \
+        | _fzf_menu "Download complete!"
 }
 

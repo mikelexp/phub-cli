@@ -23,12 +23,26 @@ while true; do
     clear
     show_home
 
-    read -r -p "Select option: " choice </dev/tty
+    choice=$(printf "%s\n" \
+        "browse|Browse categories" \
+        "search|Search videos" \
+        "quit|Quit" \
+        | fzf \
+            --prompt="Home ❯ " \
+            --height=100% \
+            --border \
+            --layout=reverse \
+            --cycle \
+            --delimiter="|" \
+            --with-nth=2 \
+        | awk -F'|' '{print $1}')
+
+    [ -z "$choice" ] && continue
 
     case "$choice" in
 
     #categ
-    1)
+    browse)
         category=$(get_categories | fzf \
             --prompt="Category ❯ " \
             --height=100% \
@@ -82,9 +96,10 @@ while true; do
             while true; do
                 clear
                 pre_action=$(pre_play_menu)
+                [ -z "$pre_action" ] && break
 
                 case "$pre_action" in
-                    1)
+                    watch)
                         # Watch video
                         while true; do
                             if ! play_video "$viewkey"; then
@@ -95,19 +110,20 @@ while true; do
 
                             clear
                             action=$(post_play_menu)
+                            [ -z "$action" ] && break
 
                             case "$action" in
-                                1)
+                                replay)
                                     continue
                                     ;;
-                                2)
+                                results)
                                     break
                                     ;;
-                                3)
+                                home)
                                     nav="home"
                                     break
                                     ;;
-                                q|Q)
+                                quit)
                                     clear
                                     exit 0
                                     ;;
@@ -119,30 +135,32 @@ while true; do
                         [ "$nav" = "home" ] && break
                         break
                         ;;
-                    2)
+                    download)
                         # Download video
                         while true; do
                             clear
                             quality=$(quality_menu)
+                            [ -z "$quality" ] && break
 
                             case "$quality" in
                                 1|2|3|4)
                                     if download_video "$viewkey" "$quality"; then
                                         clear
                                         dl_action=$(post_download_menu)
+                                        [ -z "$dl_action" ] && break
 
                                         case "$dl_action" in
-                                            1)
+                                            another)
                                                 continue
                                                 ;;
-                                            2)
+                                            results)
                                                 break
                                                 ;;
-                                            3)
+                                            home)
                                                 nav="home"
                                                 break
                                                 ;;
-                                            q|Q)
+                                            quit)
                                                 clear
                                                 exit 0
                                                 ;;
@@ -154,7 +172,7 @@ while true; do
                                         break
                                     fi
                                     ;;
-                                b|B)
+                                back)
                                     break
                                     ;;
                                 *)
@@ -165,12 +183,12 @@ while true; do
                         [ "$nav" = "home" ] && break
                         break
                         ;;
-                    3)
+                    browser)
                         # Open in browser
                         open_in_browser "$viewkey"
                         continue
                         ;;
-                    b|B)
+                    back)
                         break
                         ;;
                     *)
@@ -188,7 +206,7 @@ while true; do
         ;;
 
     #Search
-    2)
+    search)
         read -r -p "Search query: " query </dev/tty
         [ -z "$query" ] && continue
         page=1
@@ -231,9 +249,10 @@ while true; do
             while true; do
                 clear
                 pre_action=$(pre_play_menu)
+                [ -z "$pre_action" ] && break
 
                 case "$pre_action" in
-                    1)
+                    watch)
                         # Watch video
                         while true; do
                             if ! play_video "$viewkey"; then
@@ -244,19 +263,20 @@ while true; do
 
                             clear
                             action=$(post_play_menu)
+                            [ -z "$action" ] && break
 
                             case "$action" in
-                                1)
+                                replay)
                                     continue
                                     ;;
-                                2)
+                                results)
                                     break
                                     ;;
-                                3)
+                                home)
                                     nav="home"
                                     break
                                     ;;
-                                q|Q)
+                                quit)
                                     clear
                                     exit 0
                                     ;;
@@ -268,30 +288,32 @@ while true; do
                         [ "$nav" = "home" ] && break
                         break
                         ;;
-                    2)
+                    download)
                         # Download video
                         while true; do
                             clear
                             quality=$(quality_menu)
+                            [ -z "$quality" ] && break
 
                             case "$quality" in
                                 1|2|3|4)
                                     if download_video "$viewkey" "$quality"; then
                                         clear
                                         dl_action=$(post_download_menu)
+                                        [ -z "$dl_action" ] && break
 
                                         case "$dl_action" in
-                                            1)
+                                            another)
                                                 continue
                                                 ;;
-                                            2)
+                                            results)
                                                 break
                                                 ;;
-                                            3)
+                                            home)
                                                 nav="home"
                                                 break
                                                 ;;
-                                            q|Q)
+                                            quit)
                                                 clear
                                                 exit 0
                                                 ;;
@@ -303,7 +325,7 @@ while true; do
                                         break
                                     fi
                                     ;;
-                                b|B)
+                                back)
                                     break
                                     ;;
                                 *)
@@ -314,12 +336,12 @@ while true; do
                         [ "$nav" = "home" ] && break
                         break
                         ;;
-                    3)
+                    browser)
                         # Open in browser
                         open_in_browser "$viewkey"
                         continue
                         ;;
-                    b|B)
+                    back)
                         break
                         ;;
                     *)
@@ -336,7 +358,7 @@ while true; do
         ;;
 
     #Quit
-    q|Q)
+    quit)
         clear
         exit 0
         ;;
