@@ -149,6 +149,14 @@ while true; do
                                 back)
                                     break
                                     ;;
+                                home)
+                                    nav="home"
+                                    break
+                                    ;;
+                                quit)
+                                    clear
+                                    exit 0
+                                    ;;
                                 *)
                                     continue
                                     ;;
@@ -273,6 +281,14 @@ while true; do
                                 back)
                                     break
                                     ;;
+                                home)
+                                    nav="home"
+                                    break
+                                    ;;
+                                quit)
+                                    clear
+                                    exit 0
+                                    ;;
                                 *)
                                     continue
                                     ;;
@@ -288,6 +304,14 @@ while true; do
                         ;;
                     back)
                         break
+                        ;;
+                    home)
+                        nav="home"
+                        break
+                        ;;
+                    quit)
+                        clear
+                        exit 0
                         ;;
                     *)
                         continue
@@ -411,6 +435,14 @@ while true; do
                                 back)
                                     break
                                     ;;
+                                home)
+                                    nav="home"
+                                    break
+                                    ;;
+                                quit)
+                                    clear
+                                    exit 0
+                                    ;;
                                 *)
                                     continue
                                     ;;
@@ -426,6 +458,14 @@ while true; do
                         ;;
                     back)
                         break
+                        ;;
+                    home)
+                        nav="home"
+                        break
+                        ;;
+                    quit)
+                        clear
+                        exit 0
                         ;;
                     *)
                         continue
