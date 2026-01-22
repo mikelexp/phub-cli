@@ -57,6 +57,7 @@ while true; do
         [ -z "$category" ] && continue
 
         cid=$(echo "$category" | awk -F'|' '{print $1}')
+        category_name=$(echo "$category" | awk -F'|' '{print $2}')
         page=1
 
         #res
@@ -70,7 +71,7 @@ while true; do
             nav_options="${nav_options}NEXT|>>> Next page"
 
             video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
-                --prompt="Video (page $page) ❯ " \
+                --prompt="$category_name (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
@@ -83,6 +84,7 @@ while true; do
             [ -z "$video" ] && break
 
             viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+            video_title=$(echo "$video" | awk -F'|' '{print $2}')
 
             # Handle pagination
             if [ "$viewkey" = "NEXT" ]; then
@@ -97,7 +99,7 @@ while true; do
             #pre-play menu
             while true; do
                 clear
-                pre_action=$(pre_play_menu)
+                pre_action=$(pre_play_menu "$video_title")
                 [ -z "$pre_action" ] && break
 
                 case "$pre_action" in
@@ -111,14 +113,14 @@ while true; do
                         # Download video
                         while true; do
                             clear
-                            quality=$(quality_menu)
+                            quality=$(quality_menu "$video_title")
                             [ -z "$quality" ] && break
 
                             case "$quality" in
                                 1|2|3|4)
                                     if download_video "$viewkey" "$quality"; then
                                         clear
-                                        dl_action=$(post_download_menu)
+                                        dl_action=$(post_download_menu "$video_title")
                                         [ -z "$dl_action" ] && break
 
                                         case "$dl_action" in
@@ -193,7 +195,7 @@ while true; do
             nav_options="${nav_options}NEXT|>>> Next page"
 
             video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
-                --prompt="Search (page $page) ❯ " \
+                --prompt="Search: $query (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
@@ -206,6 +208,7 @@ while true; do
             [ -z "$video" ] && break
 
             viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+            video_title=$(echo "$video" | awk -F'|' '{print $2}')
 
             # Handle pagination
             if [ "$viewkey" = "NEXT" ]; then
@@ -220,7 +223,7 @@ while true; do
             #pre-play menu
             while true; do
                 clear
-                pre_action=$(pre_play_menu)
+                pre_action=$(pre_play_menu "$video_title")
                 [ -z "$pre_action" ] && break
 
                 case "$pre_action" in
@@ -234,14 +237,14 @@ while true; do
                         # Download video
                         while true; do
                             clear
-                            quality=$(quality_menu)
+                            quality=$(quality_menu "$video_title")
                             [ -z "$quality" ] && break
 
                             case "$quality" in
                                 1|2|3|4)
                                     if download_video "$viewkey" "$quality"; then
                                         clear
-                                        dl_action=$(post_download_menu)
+                                        dl_action=$(post_download_menu "$video_title")
                                         [ -z "$dl_action" ] && break
 
                                         case "$dl_action" in
@@ -317,6 +320,7 @@ while true; do
         [ -z "$channel" ] && continue
 
         channel_name=$(echo "$channel" | awk -F'|' '{print $1}')
+        channel_title=$(echo "$channel" | awk -F'|' '{print $2}')
         page=1
 
         while true; do
@@ -329,7 +333,7 @@ while true; do
             nav_options="${nav_options}NEXT|>>> Next page"
 
             video=$(printf "%s\n%b" "$video_list" "$nav_options" | fzf \
-                --prompt="Channel videos (page $page) ❯ " \
+                --prompt="$channel_title (page $page) ❯ " \
                 --height=100% \
                 --border \
                 --layout=reverse \
@@ -342,6 +346,7 @@ while true; do
             [ -z "$video" ] && break
 
             viewkey=$(echo "$video" | awk -F'|' '{print $1}')
+            video_title=$(echo "$video" | awk -F'|' '{print $2}')
 
             # Handle pagination
             if [ "$viewkey" = "NEXT" ]; then
@@ -356,7 +361,7 @@ while true; do
             #pre-play menu
             while true; do
                 clear
-                pre_action=$(pre_play_menu)
+                pre_action=$(pre_play_menu "$video_title" "$channel_title")
                 [ -z "$pre_action" ] && break
 
                 case "$pre_action" in
@@ -370,14 +375,14 @@ while true; do
                         # Download video
                         while true; do
                             clear
-                            quality=$(quality_menu)
+                            quality=$(quality_menu "$video_title" "$channel_title")
                             [ -z "$quality" ] && break
 
                             case "$quality" in
                                 1|2|3|4)
                                     if download_video "$viewkey" "$quality"; then
                                         clear
-                                        dl_action=$(post_download_menu)
+                                        dl_action=$(post_download_menu "$video_title" "$channel_title")
                                         [ -z "$dl_action" ] && break
 
                                         case "$dl_action" in
