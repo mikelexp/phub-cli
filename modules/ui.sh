@@ -71,19 +71,3 @@ quality_menu() {
         | _fzf_menu "$prompt"
 }
 
-post_download_menu() {
-    local video_title="$1"
-    local channel_name="$2"
-    local prompt="Download complete!"
-
-    [ -n "$channel_name" ] && prompt="$prompt - $channel_name"
-    [ -n "$video_title" ] && prompt="$prompt - $video_title"
-
-    printf "%s\n" \
-        "another|Download another quality" \
-        "results|Back to results" \
-        "home|Back to home" \
-        "quit|Quit" \
-        | _fzf_menu "$prompt"
-}
-

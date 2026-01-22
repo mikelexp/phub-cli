@@ -111,59 +111,31 @@ while true; do
                         ;;
                     download)
                         # Download video
-                        while true; do
-                            clear
-                            quality=$(quality_menu "$video_title")
-                            [ -z "$quality" ] && break
+                        clear
+                        quality=$(quality_menu "$video_title")
+                        [ -z "$quality" ] && continue
 
-                            case "$quality" in
-                                1|2|3|4)
-                                    if download_video "$viewkey" "$quality"; then
-                                        clear
-                                        dl_action=$(post_download_menu "$video_title")
-                                        [ -z "$dl_action" ] && break
-
-                                        case "$dl_action" in
-                                            another)
-                                                continue
-                                                ;;
-                                            results)
-                                                break
-                                                ;;
-                                            home)
-                                                nav="home"
-                                                break
-                                                ;;
-                                            quit)
-                                                clear
-                                                exit 0
-                                                ;;
-                                            *)
-                                                continue
-                                                ;;
-                                        esac
-                                    else
-                                        break
-                                    fi
-                                    ;;
-                                back)
-                                    break
-                                    ;;
-                                home)
-                                    nav="home"
-                                    break
-                                    ;;
-                                quit)
-                                    clear
-                                    exit 0
-                                    ;;
-                                *)
-                                    continue
-                                    ;;
-                            esac
-                        done
-                        [ "$nav" = "home" ] && break
-                        break
+                        case "$quality" in
+                            1|2|3|4)
+                                download_video "$viewkey" "$quality"
+                                # Return to pre-play menu
+                                continue
+                                ;;
+                            back)
+                                continue
+                                ;;
+                            home)
+                                nav="home"
+                                break
+                                ;;
+                            quit)
+                                clear
+                                exit 0
+                                ;;
+                            *)
+                                continue
+                                ;;
+                        esac
                         ;;
                     browser)
                         # Open in browser
@@ -243,59 +215,31 @@ while true; do
                         ;;
                     download)
                         # Download video
-                        while true; do
-                            clear
-                            quality=$(quality_menu "$video_title")
-                            [ -z "$quality" ] && break
+                        clear
+                        quality=$(quality_menu "$video_title")
+                        [ -z "$quality" ] && continue
 
-                            case "$quality" in
-                                1|2|3|4)
-                                    if download_video "$viewkey" "$quality"; then
-                                        clear
-                                        dl_action=$(post_download_menu "$video_title")
-                                        [ -z "$dl_action" ] && break
-
-                                        case "$dl_action" in
-                                            another)
-                                                continue
-                                                ;;
-                                            results)
-                                                break
-                                                ;;
-                                            home)
-                                                nav="home"
-                                                break
-                                                ;;
-                                            quit)
-                                                clear
-                                                exit 0
-                                                ;;
-                                            *)
-                                                continue
-                                                ;;
-                                        esac
-                                    else
-                                        break
-                                    fi
-                                    ;;
-                                back)
-                                    break
-                                    ;;
-                                home)
-                                    nav="home"
-                                    break
-                                    ;;
-                                quit)
-                                    clear
-                                    exit 0
-                                    ;;
-                                *)
-                                    continue
-                                    ;;
-                            esac
-                        done
-                        [ "$nav" = "home" ] && break
-                        break
+                        case "$quality" in
+                            1|2|3|4)
+                                download_video "$viewkey" "$quality"
+                                # Return to pre-play menu
+                                continue
+                                ;;
+                            back)
+                                continue
+                                ;;
+                            home)
+                                nav="home"
+                                break
+                                ;;
+                            quit)
+                                clear
+                                exit 0
+                                ;;
+                            *)
+                                continue
+                                ;;
+                        esac
                         ;;
                     browser)
                         # Open in browser
